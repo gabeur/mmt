@@ -229,11 +229,15 @@ class CENet(BaseModel):
     self.text_gu = nn.ModuleDict()
     for mod in self.modalities:
       if self.txt_pro == 'gbn':
-        self.text_gu[mod] = GatedEmbeddingUnit(
-            text_dim, same_dim, use_bn=True, normalize=self.normalize_experts)
+        self.text_gu[mod] = GatedEmbeddingUnit(text_dim,
+                                               same_dim,
+                                               use_bn=True,
+                                               normalize=self.normalize_experts)
       elif self.txt_pro == 'gem':
-        self.text_gu[mod] = GatedEmbeddingUnit(
-            text_dim, same_dim, use_bn=False, normalize=self.normalize_experts)
+        self.text_gu[mod] = GatedEmbeddingUnit(text_dim,
+                                               same_dim,
+                                               use_bn=False,
+                                               normalize=self.normalize_experts)
       elif self.txt_pro == 'lin':
         self.text_gu[mod] = ReduceDim(text_dim, same_dim)
 
@@ -364,12 +368,11 @@ class CENet(BaseModel):
       position_ids = th.stack(position_ids_list, dim=1).to(device)
       attention_mask = th.stack(attention_mask_list, dim=1).to(device)
 
-      txt_bert_output = self.txt_bert(
-          input_ids,
-          attention_mask=attention_mask,
-          token_type_ids=token_type_ids,
-          position_ids=position_ids,
-          head_mask=None)
+      txt_bert_output = self.txt_bert(input_ids,
+                                      attention_mask=attention_mask,
+                                      token_type_ids=token_type_ids,
+                                      position_ids=position_ids,
+                                      head_mask=None)
       last_layer = txt_bert_output[0]
 
       if self.post_agg == 'cls':
@@ -571,12 +574,11 @@ class CENet(BaseModel):
         token_ids = token_ids.view(b * captions_per_video, max_text_words,
                                    feat_dim)
 
-      vid_bert_output = self.vid_bert(
-          input_ids,
-          attention_mask=attention_mask,
-          token_type_ids=token_type_ids,
-          position_ids=position_ids,
-          features=features)
+      vid_bert_output = self.vid_bert(input_ids,
+                                      attention_mask=attention_mask,
+                                      token_type_ids=token_type_ids,
+                                      position_ids=position_ids,
+                                      features=features)
 
       last_layer = vid_bert_output[0]
       vid_embd = last_layer[:, 0]
@@ -619,8 +621,8 @@ class CENet(BaseModel):
     if self.normalize_experts:
       for _, modality in enumerate(self.modalities):
         experts[modality] = nn.functional.normalize(experts[modality], dim=-1)
-        text_embd[modality] = nn.functional.normalize(
-            text_embd[modality], dim=-1)
+        text_embd[modality] = nn.functional.normalize(text_embd[modality],
+                                                      dim=-1)
 
     if self.training:
       merge_caption_similiarities = 'avg'
@@ -696,7 +698,7 @@ class GatedEmbeddingUnit(nn.Module):
     x = self.fc(x)
     x = self.cg(x)
     if self.normalize:
-      x = F.normalize(x)
+      x = F.normalize(x, dim=-1)
     return x
 
 
@@ -708,7 +710,7 @@ class MimicCEGatedEmbeddingUnit(nn.Module):
 
   def forward(self, x):
     x = self.cg(x)
-    x = F.normalize(x)
+    x = F.normalize(x, dim=-1)
     return x
 
 
@@ -720,7 +722,7 @@ class ReduceDim(nn.Module):
 
   def forward(self, x):
     x = self.fc(x)
-    x = F.normalize(x)
+    x = F.normalize(x, dim=-1)
     return x
 
 
@@ -756,7 +758,7 @@ class GatedEmbeddingUnitReasoning(nn.Module):
 
   def forward(self, x, mask):
     x = self.cg(x, mask)
-    x = F.normalize(x)
+    x = F.normalize(x, dim=-1)
     return x
 
 
