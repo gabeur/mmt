@@ -122,7 +122,7 @@ class CENet(BaseModel):
       self.batch_norm_f1 = nn.BatchNorm1d(same_dim)
       self.batch_norm_f2 = nn.BatchNorm1d(same_dim)
 
-      self.video_gu = nn.ModuleDict()
+      self.video_GU = nn.ModuleDict()
       for mod in self.modalities:
         self.video_GU[mod] = GatedEmbeddingUnitReasoning(same_dim)
 
@@ -226,20 +226,20 @@ class CENet(BaseModel):
                                       output_dim)
         text_dim = output_dim
 
-    self.text_gu = nn.ModuleDict()
+    self.text_GU = nn.ModuleDict()
     for mod in self.modalities:
       if self.txt_pro == 'gbn':
-        self.text_gu[mod] = GatedEmbeddingUnit(text_dim,
+        self.text_GU[mod] = GatedEmbeddingUnit(text_dim,
                                                same_dim,
                                                use_bn=True,
                                                normalize=self.normalize_experts)
       elif self.txt_pro == 'gem':
-        self.text_gu[mod] = GatedEmbeddingUnit(text_dim,
+        self.text_GU[mod] = GatedEmbeddingUnit(text_dim,
                                                same_dim,
                                                use_bn=False,
                                                normalize=self.normalize_experts)
       elif self.txt_pro == 'lin':
-        self.text_gu[mod] = ReduceDim(text_dim, same_dim)
+        self.text_GU[mod] = ReduceDim(text_dim, same_dim)
 
     # Weightening of each modality similarity
     if self.txt_wgh == 'emb':
@@ -411,7 +411,7 @@ class CENet(BaseModel):
     # From the text representation, compute as many embeddings as there are
     # modalities
     for mod in self.modalities:
-      layer = self.text_gu[mod]
+      layer = self.text_GU[mod]
       text_ = layer(text)
       text_ = text_.view(b, captions_per_video, -1)
       text_embd[mod] = text_
@@ -478,7 +478,7 @@ class CENet(BaseModel):
         curr_mask = self.f_reason_2(F.relu(curr_mask))
         masks[modality] = curr_mask
 
-        mod_gu = self.video_gu[modality]
+        mod_gu = self.video_GU[modality]
         experts[modality] = mod_gu(experts[modality], masks[modality])
 
     # If Bert architecture is employed

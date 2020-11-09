@@ -4,12 +4,7 @@
     "experts": {
         "face_dim": 512,
         "modalities": [
-            "face",
-            "ocr",
-            "rgb",
             "s3d",
-            "scene",
-            "speech",
             "vggish"
         ]
     },
@@ -54,18 +49,20 @@
             "args": {
                 "mix": [
                     {
-                        "dataset_name": "MSRVTT",
-                        "cut_name": "jsfusion",
-                        "split_name": "trainval",
-                        "data_dir": "data/MSRVTT/symlinked-feats",
+                        "dataset_name": "HowTo100M",
+                        "cut_name": "full",
+                        "split_name": "train",
+                        "data_dir": "data/howto100m/symlinked-feats",
                         "mix_weight": 1.0,
-                        "query_shuffling": "shufk1",
+                        "query_shuffling": "indiv",
                         "temporal_encoding_window": 1,
                         "max_text_words": 30,
-                        "max_expert_tokens": 30
+                        "max_expert_tokens": 30,
+                        "caption_length": 30,
+                        "clip_duration": 30
                     }
                 ],
-                "batch_size": 32,
+                "batch_size": 64,
                 "num_workers": 64,
                 "pin_memory": false
             }
@@ -77,18 +74,69 @@
             "args": {
                 "mix": [
                     {
-                        "dataset_name": "MSRVTT",
-                        "cut_name": "jsfusion",
+                        "dataset_name": "HowTo100M",
+                        "cut_name": "full",
                         "split_name": "trn",
-                        "data_dir": "data/MSRVTT/symlinked-feats",
-                        "captions_per_video": 1,
+                        "data_dir": "data/howto100m/symlinked-feats",
+                        "mix_weight": 1.0,
                         "query_shuffling": "indiv",
                         "temporal_encoding_window": 1,
+                        "captions_per_video": 1,
                         "max_text_words": 30,
-                        "max_expert_tokens": 30
+                        "max_expert_tokens": 30,
+                        "caption_length": 30,
+                        "clip_duration": 30
                     }
                 ],
-                "batch_size": 32,
+                "batch_size": 64,
+                "num_workers": 64,
+                "pin_memory": false
+            }
+        },
+        {
+            "type": "ExpertDataLoader",
+            "args": {
+                "mix": [
+                    {
+                        "dataset_name": "HowTo100M",
+                        "cut_name": "full",
+                        "split_name": "val",
+                        "data_dir": "data/howto100m/symlinked-feats",
+                        "mix_weight": 1.0,
+                        "query_shuffling": "indiv",
+                        "temporal_encoding_window": 1,
+                        "captions_per_video": 1,
+                        "max_text_words": 30,
+                        "max_expert_tokens": 30,
+                        "caption_length": 30,
+                        "clip_duration": 30
+                    }
+                ],
+                "batch_size": 64,
+                "num_workers": 64,
+                "pin_memory": false
+            }
+        },
+        {
+            "type": "ExpertDataLoader",
+            "args": {
+                "mix": [
+                    {
+                        "dataset_name": "HowTo100M",
+                        "cut_name": "full",
+                        "split_name": "test",
+                        "data_dir": "data/howto100m/symlinked-feats",
+                        "mix_weight": 1.0,
+                        "query_shuffling": "indiv",
+                        "temporal_encoding_window": 1,
+                        "captions_per_video": 1,
+                        "max_text_words": 30,
+                        "max_expert_tokens": 30,
+                        "caption_length": 30,
+                        "clip_duration": 30
+                    }
+                ],
+                "batch_size": 64,
                 "num_workers": 64,
                 "pin_memory": false
             }
@@ -105,12 +153,13 @@
                         "captions_per_video": 1,
                         "query_shuffling": "indiv",
                         "temporal_encoding_window": 1,
+                        "captions_per_video": 1,
                         "max_text_words": 30,
                         "max_expert_tokens": 30
                     }
                 ],
                 "batch_size": 32,
-                "num_workers": 64,
+                "num_workers": 0,
                 "pin_memory": false
             }
         }
@@ -121,19 +170,22 @@
             "args": {
                 "mix": [
                     {
-                        "dataset_name": "MSRVTT",
-                        "cut_name": "jsfusion",
+                        "dataset_name": "HowTo100M",
+                        "cut_name": "full",
                         "split_name": "test",
-                        "data_dir": "data/MSRVTT/symlinked-feats",
-                        "captions_per_video": 1,
+                        "data_dir": "data/howto100m/symlinked-feats",
+                        "mix_weight": 1.0,
                         "query_shuffling": "indiv",
                         "temporal_encoding_window": 1,
+                        "captions_per_video": 1,
                         "max_text_words": 30,
-                        "max_expert_tokens": 30
+                        "max_expert_tokens": 30,
+                        "caption_length": 30,
+                        "clip_duration": 30
                     }
                 ],
-                "batch_size": 32,
-                "num_workers": 0,
+                "batch_size": 64,
+                "num_workers": 64,
                 "pin_memory": false
             }
         }
@@ -159,7 +211,7 @@
     "visualizer": {
         "type": "Visualizer",
         "args": {
-            "vis_vid_freq": 25.0,
+            "vis_vid_freq": 50,
             "num_samples": 20
         }
     },
@@ -167,18 +219,17 @@
         "type": "StepLR",
         "args": {
             "step_size": 1,
-            "gamma": 0.95
+            "gamma": 0.98
         }
     },
     "trainer": {
-        "epochs": 50,
-        "max_samples_per_epoch": 32000,
+        "epochs": 200,
+        "max_samples_per_epoch": 640000,
         "save_period": 1,
         "skip_first_n_saves": 0,
         "include_optim_in_ckpts": true,
         "verbosity": 2,
         "tensorboard": true,
         "monitor": "max epoch"
-    },
-    "cross_seed": 0
+    }
 }

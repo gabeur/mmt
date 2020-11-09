@@ -44,13 +44,81 @@ tar -xvf activity-net.tar.gz
 tar -xvf LSMDC.tar.gz
 ```
 
+Download the checkpoints:
+```bash
+# Create and move to mmt/data/checkpoints directory
+mkdir checkpoints
+cd checkpoints
+# Download checkpoints
+wget http://pascal.inrialpes.fr/data2/vgabeur/mmt/data/checkpoints/HowTo100M_full_train.pth
+wget http://pascal.inrialpes.fr/data2/vgabeur/mmt/data/checkpoints/MSRVTT_jsfusion_trainval.pth
+wget http://pascal.inrialpes.fr/data2/vgabeur/mmt/data/checkpoints/prtrn_MSRVTT_jsfusion_trainval.pth
+```
+
 You can then run the following scripts:
 
 ### MSRVTT
 
-Training from scratch
+#### Training from scratch
+
+Training + evaluation:
 ```bash
 python -m train --config configs_pub/eccv20/MSRVTT_jsfusion_trainval.json
+```
+
+Evaluation from checkpoint:
+```bash
+python -m train --config configs_pub/eccv20/MSRVTT_jsfusion_trainval.json --only_eval --load_checkpoint data/checkpoints/MSRVTT_jsfusion_trainval.pth
+```
+
+Expected results:
+```
+MSRVTT_jsfusion_test:
+ t2v_metrics/R1/final_eval: 24.3
+ t2v_metrics/R5/final_eval: 54.9
+ t2v_metrics/R10/final_eval: 68.6
+ t2v_metrics/R50/final_eval: 89.6
+ t2v_metrics/MedR/final_eval: 5.0
+ t2v_metrics/MeanR/final_eval: 26.485
+ t2v_metrics/geometric_mean_R1-R5-R10/final_eval: 45.06446759875623
+ v2t_metrics/R1/final_eval: 24.5
+ v2t_metrics/R5/final_eval: 54.5
+ v2t_metrics/R10/final_eval: 69.1
+ v2t_metrics/R50/final_eval: 90.6
+ v2t_metrics/MedR/final_eval: 4.0
+ v2t_metrics/MeanR/final_eval: 24.06
+ v2t_metrics/geometric_mean_R1-R5-R10/final_eval: 45.187003696913585
+```
+
+#### Finetuning from a HowTo100M pretrained model:
+
+Training + evaluation:
+```bash
+python -m train --config configs_pub/eccv20/prtrn_MSRVTT_jsfusion_trainval.json --load_checkpoint data/checkpoints/HowTo100M_full_train.pth
+```
+
+Evaluation from checkpoint:
+```bash
+python -m train --config configs_pub/eccv20/prtrn_MSRVTT_jsfusion_trainval.json --only_eval --load_checkpoint data/checkpoints/prtrn_MSRVTT_jsfusion_trainval.pth
+```
+
+Expected results:
+```
+MSRVTT_jsfusion_test:
+ t2v_metrics/R1/final_eval: 24.7
+ t2v_metrics/R5/final_eval: 57.1
+ t2v_metrics/R10/final_eval: 68.6
+ t2v_metrics/R50/final_eval: 90.6
+ t2v_metrics/MedR/final_eval: 4.0
+ t2v_metrics/MeanR/final_eval: 23.044
+ t2v_metrics/geometric_mean_R1-R5-R10/final_eval: 45.907720169747826
+ v2t_metrics/R1/final_eval: 27.2
+ v2t_metrics/R5/final_eval: 55.1
+ v2t_metrics/R10/final_eval: 68.4
+ v2t_metrics/R50/final_eval: 90.3
+ v2t_metrics/MedR/final_eval: 4.0
+ v2t_metrics/MeanR/final_eval: 19.607
+ v2t_metrics/geometric_mean_R1-R5-R10/final_eval: 46.80140254398485
 ```
 
 ### ActivityNet
