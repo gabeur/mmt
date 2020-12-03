@@ -333,6 +333,16 @@ class BaseDataset(Dataset):
         txt_caption += "."
       txt_caption = txt_caption.capitalize()
       tokens = self.tokenizer.tokenize(txt_caption)
+      if special_tokens:
+        cls = [self.tokenizer.cls_token]
+        sep = [self.tokenizer.sep_token]  # [SEP] token
+        tokens = cls + tokens + sep
+      tokens = tokens[:self.max_text_words]
+      # Make sure that the last token is
+      # the [SEP] token
+      if special_tokens:
+        tokens[-1] = self.tokenizer.sep_token
+
       ids = self.tokenizer.convert_tokens_to_ids(tokens)
     else:
       ids = list(range(len(word_list)))
@@ -340,19 +350,9 @@ class BaseDataset(Dataset):
     if len(ids) <= 0:
       ipdb.set_trace()
 
-    if not hasattr(self.tokenizer, "cls_token_ids"):
-      special_tokens = False
-
-    if special_tokens:
-      cls = [self.tokenizer.cls_token_id]
-      sep = [self.tokenizer.sep_token_id]  # [SEP] token
-      ids = cls + ids + sep
-    ids = ids[:self.max_text_words]
-    # Make sure that the last token is the [SEP] token
-    if special_tokens:
-      ids[-1] = self.tokenizer.sep_token_id
-
     return ids
+
+
 
   def get_feature_timings(self, nb_feats, feat_width, stride=None, group=None):
     # Return an array containing the start time of each feature in the first

@@ -74,20 +74,20 @@ python -m train --config configs_pub/eccv20/MSRVTT_jsfusion_trainval.json --only
 Expected results:
 ```
 MSRVTT_jsfusion_test:
- t2v_metrics/R1/final_eval: 24.3
- t2v_metrics/R5/final_eval: 54.9
- t2v_metrics/R10/final_eval: 68.6
- t2v_metrics/R50/final_eval: 89.6
- t2v_metrics/MedR/final_eval: 5.0
- t2v_metrics/MeanR/final_eval: 26.485
- t2v_metrics/geometric_mean_R1-R5-R10/final_eval: 45.06446759875623
- v2t_metrics/R1/final_eval: 24.5
- v2t_metrics/R5/final_eval: 54.5
- v2t_metrics/R10/final_eval: 69.1
- v2t_metrics/R50/final_eval: 90.6
- v2t_metrics/MedR/final_eval: 4.0
- v2t_metrics/MeanR/final_eval: 24.06
- v2t_metrics/geometric_mean_R1-R5-R10/final_eval: 45.187003696913585
+t2v_metrics/R1/final_eval: 24.1
+t2v_metrics/R5/final_eval: 56.4
+t2v_metrics/R10/final_eval: 69.6
+t2v_metrics/R50/final_eval: 90.4
+t2v_metrics/MedR/final_eval: 4.0
+t2v_metrics/MeanR/final_eval: 25.797
+t2v_metrics/geometric_mean_R1-R5-R10/final_eval: 45.56539387310681
+v2t_metrics/R1/final_eval: 25.9
+v2t_metrics/R5/final_eval: 58.1
+v2t_metrics/R10/final_eval: 69.3
+v2t_metrics/R50/final_eval: 90.8
+v2t_metrics/MedR/final_eval: 4.0
+v2t_metrics/MeanR/final_eval: 22.852
+v2t_metrics/geometric_mean_R1-R5-R10/final_eval: 47.06915231647284
 ```
 
 #### Finetuning from a HowTo100M pretrained model:
@@ -105,20 +105,20 @@ python -m train --config configs_pub/eccv20/prtrn_MSRVTT_jsfusion_trainval.json 
 Expected results:
 ```
 MSRVTT_jsfusion_test:
- t2v_metrics/R1/final_eval: 24.7
- t2v_metrics/R5/final_eval: 57.1
- t2v_metrics/R10/final_eval: 68.6
- t2v_metrics/R50/final_eval: 90.6
- t2v_metrics/MedR/final_eval: 4.0
- t2v_metrics/MeanR/final_eval: 23.044
- t2v_metrics/geometric_mean_R1-R5-R10/final_eval: 45.907720169747826
- v2t_metrics/R1/final_eval: 27.2
- v2t_metrics/R5/final_eval: 55.1
- v2t_metrics/R10/final_eval: 68.4
- v2t_metrics/R50/final_eval: 90.3
- v2t_metrics/MedR/final_eval: 4.0
- v2t_metrics/MeanR/final_eval: 19.607
- v2t_metrics/geometric_mean_R1-R5-R10/final_eval: 46.80140254398485
+t2v_metrics/R1/final_eval: 25.8
+t2v_metrics/R5/final_eval: 57.2
+t2v_metrics/R10/final_eval: 69.3
+t2v_metrics/R50/final_eval: 90.7
+t2v_metrics/MedR/final_eval: 4.0
+t2v_metrics/MeanR/final_eval: 22.355
+t2v_metrics/geometric_mean_R1-R5-R10/final_eval: 46.76450299746546
+v2t_metrics/R1/final_eval: 26.1
+v2t_metrics/R5/final_eval: 57.8
+v2t_metrics/R10/final_eval: 68.5
+v2t_metrics/R50/final_eval: 90.6
+v2t_metrics/MedR/final_eval: 4.0
+v2t_metrics/MeanR/final_eval: 20.056
+v2t_metrics/geometric_mean_R1-R5-R10/final_eval: 46.92665942024404
 ```
 
 ### ActivityNet
@@ -158,4 +158,4 @@ The features "face", "ocr", "rgb"(appearance), "scene" and "speech" were extract
 
 ## Acknowledgements
 
-Our code is structured following the [template](https://github.com/victoresque/pytorch-template) proposed by @victoresque. Our code is based on the implementation of [Collaborative Experts](https://github.com/albanie/collaborative-experts), [Transformers](https://github.com/huggingface/transformers) and [Mixture of Embedding Experts](https://github.com/antoine77340/Mixture-of-Embedding-Experts).
+Our code is structured following the [template](https://github.com/victoresque/pytorch-template) proposed by @victoresque. Our code is based on the implementation of [Collaborative Experts](https://github.com/albanie/collaborative-experts), [Transformers](https://github.com/huggingface/transformers) and [Mixture of Embedding Experts](https://github.com/antoine77340/Mixture-of-Embedding-Experts). We thank Maksim Dzabraev for discovering bugs in our implementation and notifying us of the issues (See the issues section for more detail).
