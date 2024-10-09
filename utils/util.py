@@ -394,7 +394,7 @@ def get_hparams_from_config(config):
       hparams[f'weight_{data_dic["dataset_name"]}'] = 1
     hparams['ptrn_epochs'] = 0
 
-  if 'query_suffling' in config['train_sets'][0]['args']['mix'][0]:
+  if 'query_shuffling' in config['train_sets'][0]['args']['mix'][0]:
     hparams['query_shuffling'] = config['train_sets'][0]['args']['mix'][0][
         'query_shuffling']
 
